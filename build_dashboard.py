@@ -175,8 +175,9 @@ def main() -> None:
 <head>
 <meta charset="utf-8">
 <title>MPA Vessel Watch Dashboard (Made by Scott Y)</title>
+<link href="https://fonts.cdnfonts.com/css/varsity-team" rel="stylesheet">
 <style>
-  body {{ font-family: 'Segoe UI', Arial, sans-serif; background: #fafafa;
+  body {{ font-family: 'Varsity Team', 'Segoe UI', Arial, sans-serif; background: #fafafa;
          color: #222; margin: 0; }}
   .wrap {{ max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }}
   header {{ border-bottom: 3px solid #1f6fb5; padding-bottom: 12px;
@@ -235,7 +236,7 @@ SMCA, <span style="color:#1f6fb5; font-weight:600;">blue</span> = other
 designations. Use this to direct volunteer survey effort.</p>
 {chart_html}
 
-<h2>3. How Much to Trust This</h2>
+<h2>3. Why this matters</h2>
 <p class="desc">Backtested on a held-out month (July 13 – August 11)
 the model never saw during training.</p>
 <div class="cards">{cards_html}</div>
