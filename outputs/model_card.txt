@@ -1,0 +1,122 @@
+================================================================
+MODEL CARD: MPA Fishing-Activity Classifier (Random Forest v0.1)
+mpa-vessel-watch project — June 11, 2026
+================================================================
+
+WHAT THIS MODEL DOES
+--------------------
+Given a vessel's movement track inside a California Marine Protected
+Area, the model estimates whether the vessel was likely engaged in
+fishing activity (as opposed to transiting, cruising, or other
+non-fishing behavior), based purely on how the vessel moved.
+
+TRAINING DATA
+-------------
+- Vessel positions: Automatic Identification System (AIS) broadcast
+  data for a single day, February 10, 2025, filtered to the
+  California coast (latitude 32.5-42.0, longitude -124.5 to -117.0).
+- MPA boundaries: CDFW California Marine Protected Areas dataset
+  (ds582), all 155 designated MPAs.
+- Fishing labels: Global Fishing Watch fishing-vessels-v3 registry
+  (covering 2012-2024), supplemented by each vessel's self-reported
+  AIS vessel type. A vessel was labeled "fishing" if it appears in
+  the GFW registry of known fishing vessels OR broadcasts a fishing
+  vessel type; otherwise "non-fishing."
+
+TRAINING EXAMPLES
+-----------------
+84 vessel tracks (one vessel's visit to one MPA) from 54 unique
+vessels:
+- Fishing:      13 tracks (8 vessels)
+- Non-fishing:  71 tracks (46 vessels)
+
+Tracks with fewer than 3 position reports were excluded.
+
+HOW WELL IT WORKS
+-----------------
+Evaluated with 5-fold cross-validation, grouped by vessel so the
+model is always tested on vessels it has never seen (the fairest
+test of real-world performance):
+
+- Precision: 0.38 (+/- 0.23)  — of the vessels the model flags,
+  roughly 4 in 10 are actually fishing vessels
+- Recall:    0.47 (+/- 0.34)  — the model catches roughly half of
+  the true fishing vessels
+- F1 score:  0.40 (+/- 0.25)
+
+Combined results across all test folds (84 predictions):
+
+                        Flagged as fishing    Passed as non-fishing
+  Actually fishing            6 (correct)          7 (missed)
+  Actually non-fishing        7 (false alarm)     64 (correct)
+
+PLAIN-LANGUAGE READING: in its current form, the model is a useful
+screening aid but not a reliable detector. If it flags a vessel,
+there is meaningfully elevated suspicion (well above the 15% base
+rate of fishing vessels in this data), but every alert needs human
+review, and absence of an alert does not mean absence of fishing.
+
+WHAT THE MODEL LOOKS AT
+-----------------------
+The three most influential features, together driving ~70% of the
+model's decisions:
+
+1. Course change rate (28%) — how often and how sharply the vessel
+   turns. Fishing boats weave, circle, and double back over the same
+   patch of water; vessels passing through hold a straight line.
+2. Speed variability (23%) — how much the vessel's speed fluctuates.
+   Setting and hauling gear means constant speeding up and slowing
+   down; a transiting vessel holds steady cruise speed.
+3. Average speed (19%) — fishing happens slowly, typically 2-5
+   knots; cargo vessels and ferries cross an MPA much faster.
+
+These match what an experienced watchstander looks for, which gives
+some confidence the model is learning real behavior rather than
+statistical noise.
+
+KNOWN LIMITATIONS
+-----------------
+1. Very small training set. One day of data and only 13 fishing
+   tracks. Per-fold results ranged from 0.0 to 0.67 F1 — performance
+   estimates are unstable and should be treated as provisional.
+2. Labels are imperfect. "Non-fishing" means the vessel was not in
+   the GFW registry and did not broadcast a fishing vessel type. A
+   vessel deliberately misreporting its identity — arguably the
+   vessel of greatest enforcement interest — would be mislabeled
+   non-fishing in training.
+3. The model only sees vessels that broadcast AIS. Vessels with AIS
+   switched off ("dark vessels") are invisible to this system
+   entirely. Small recreational craft are largely absent too.
+4. Detects fishing-LIKE movement, not illegal fishing. Fishing is
+   legal in many MPAs (e.g., most SMCAs allow some take). Flags must
+   be cross-referenced against each MPA's specific regulations.
+5. Labels classify the VESSEL, not the activity. A fishing vessel
+   transiting an MPA without fishing is labeled "fishing" in the
+   training data, which adds noise.
+6. Trained on a single winter day. Seasonal fisheries, weather, and
+   weekend recreational patterns are not represented.
+
+RECOMMENDED NEXT STEPS
+----------------------
+1. More data, first and foremost: extend the pipeline from 1 day to
+   several months of daily AIS files. Every other improvement is
+   secondary to this.
+2. Label activity, not just vessel identity: use GFW's fishing-
+   effort data (hours fished per location) to label whether each
+   track was actively fishing, reducing label noise.
+3. Add MPA-specific regulations: flag only behavior inconsistent
+   with each MPA's rules (e.g., any fishing-like movement in a
+   no-take SMR is a higher-priority alert).
+4. Track-level features over longer windows: revisit duration,
+   repeat visits by the same vessel, and night-time activity are
+   known indicators not yet captured.
+5. Set an operating threshold with enforcement staff: the current
+   model balances false alarms and misses roughly equally; patrol
+   capacity should drive where that balance is set.
+
+CONTACT / FILES
+---------------
+Model file:      models/rf_classifier.pkl
+Training data:   data/labeled_features.csv
+Training script: train_classifier.py
+Feature chart:   outputs/feature_importance.png

@@ -1,0 +1,10 @@
+{
+  "precision_at_10": 0.568,
+  "recall_at_10": 0.151,
+  "base_rate": 0.0253,
+  "lift": 22.4,
+  "average_precision": 0.248,
+  "test_days": 31,
+  "test_start": "2024-07-13",
+  "test_end": "2024-08-12"
+}
