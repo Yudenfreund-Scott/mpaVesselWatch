@@ -196,9 +196,7 @@ def main() -> None:
   .card-value {{ font-size: 30px; font-weight: 700; color: #1f6fb5; }}
   .card-title {{ font-size: 14px; font-weight: 600; margin-top: 4px; }}
   .card-sub {{ font-size: 12px; color: #777; margin-top: 4px; }}
-  .note {{ font-size: 13px; color: #555; background: #fff8e6;
-           border: 1px solid #f0e0b0; border-radius: 6px;
-           padding: 10px 14px; margin-top: 18px; }}
+  .note {{ font-size: 13px; color: #555; margin-top: 18px; }}
   .mapbox {{ background: white; border: 1px solid #e2e2e2;
              border-radius: 8px; padding: 8px; }}
   @media (max-width: 700px) {{ .cards {{ grid-template-columns: 1fr; }} }}
@@ -241,8 +239,7 @@ designations. Use this to direct volunteer survey effort.</p>
 <p class="desc">Backtested on a held-out month (July 13 – August 11)
 the model never saw during training.</p>
 <div class="cards">{cards_html}</div>
-<div class="note"><b>Scores are rankings</b> — treat alerts as patrol
-priorities, not proof of violation.</div>
+<div class="note">Risk Score displays a risk percentile, not probability.</div>
 </div>
 </body>
 </html>"""
