@@ -35,7 +35,7 @@ REVIEW = 0.40
 ZONE_COLORS = {"SMR": "#8b0000", "SMCA (No-Take)": "#e67700"}
 ZONE_DEFAULT = "#1f6fb5"
 
-CALIFORNIA_CENTER = (36.0, -120.5)
+CALIFORNIA_CENTER = (33.8, -119.2)
 
 
 def marker_color(risk: float) -> str:
@@ -64,7 +64,7 @@ def build_forecast_map(day: str) -> tuple[str, dict]:
         forecast["mmsi"].map(entries_30d).fillna(0).astype(int)
     )
 
-    m = folium.Map(location=CALIFORNIA_CENTER, zoom_start=6,
+    m = folium.Map(location=CALIFORNIA_CENTER, zoom_start=7,
                    tiles="cartodbpositron")
     # Draw low-risk first so high-risk markers sit on top
     for _, v in forecast.sort_values("risk").iterrows():
