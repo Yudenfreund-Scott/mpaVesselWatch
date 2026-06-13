@@ -176,15 +176,16 @@ def main() -> None:
 <meta charset="utf-8">
 <title>MPA Vessel Watch Dashboard (Made by Scott Y)</title>
 <link href="https://fonts.cdnfonts.com/css/varsity-team" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 <style>
-  body {{ font-family: 'Varsity Team', 'Segoe UI', Arial, sans-serif; background: #fafafa;
+  body {{ font-family: 'Anton', Arial, sans-serif; background: #fafafa;
          color: #222; margin: 0; }}
   .wrap {{ max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }}
   header {{ border-bottom: 3px solid #1f6fb5; padding-bottom: 12px;
             margin-bottom: 28px; }}
-  h1 {{ font-size: 26px; margin: 0 0 4px; }}
+  h1 {{ font-family: 'Varsity Team', Arial, sans-serif; font-size: 26px; margin: 0 0 4px; }}
   .subtitle {{ color: #666; font-size: 14px; }}
-  h2 {{ font-size: 19px; margin: 36px 0 6px; }}
+  h2 {{ font-family: 'Varsity Team', Arial, sans-serif; font-size: 19px; margin: 36px 0 6px; }}
   .desc {{ color: #555; font-size: 14px; margin: 0 0 14px; }}
   .legend span {{ display: inline-block; margin-right: 18px;
                   font-size: 13px; color: #444; }}
